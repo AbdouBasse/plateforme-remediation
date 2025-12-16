@@ -1,0 +1,30 @@
+plateforme-remediation/
+├─ docs/
+│  ├─ architecture.md
+│  ├─ guide-deploiement-local.md
+│  ├─ guide-deploiement-cloud.md
+│  ├─ pedagogie-remediation.md
+│  └─ guide-enseignants.md
+├─ infra/
+│  ├─ docker/
+│  │  ├─ moodle/Dockerfile
+│  │  ├─ nginx.conf
+│  │  └─ compose.yml
+│  ├─ ansible/
+│  │  ├─ inventory.ini
+│  │  └─ playbooks/moodle.yml
+│  └─ scripts/
+│     ├─ setup-moodle.sh
+│     └─ backup-restore.sh
+├─ moodle/
+│  ├─ config-exemples/
+│  └─ cours/
+│     ├─ maths-fondamentales/
+│     ├─ linux-debutant/
+│     └─ motivation-methodologie/
+├─ .github/
+│  ├─ ISSUE_TEMPLATE.md
+│  ├─ PULL_REQUEST_TEMPLATE.md
+│  └─ workflows/ci.yml
+├─ README.md
+└─ LICENSE
