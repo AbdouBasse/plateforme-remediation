@@ -2,21 +2,26 @@
 FROM bitnami/moodle:latest
 
 # Mainteneur
-LABEL maintainer="Abdou Basse <abdoubasseoconoor@gmail.com>"
+LABEL maintainer="Abdou Basse <contact@example.com>"
 
-# Variables d'environnement (optionnelles)
+# Définir quelques variables d'environnement utiles
 ENV MOODLE_SITE_NAME="Plateforme Remediation"
 ENV MOODLE_LANG="fr"
+ENV TZ="Africa/Dakar"
 
-# Installer des extensions PHP supplémentaires si besoin
+# Passer en root pour installer des extensions PHP
 USER root
+
+# Installer des extensions PHP nécessaires pour LDAP, XMLRPC, etc.
 RUN install_packages \
     php-ldap \
     php-intl \
-    php-xmlrpc
+    php-xmlrpc \
+    php-zip \
+    php-gd
 
-# Copier un thème ou plugin personnalisé (exemple)
+# Exemple : ajouter un plugin ou thème personnalisé
 # COPY plugins/myplugin /bitnami/moodle/mod/myplugin
 
-# Revenir à l’utilisateur non-root
+# Revenir à l’utilisateur non-root (sécurité)
 USER 1001
