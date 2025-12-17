@@ -12,9 +12,16 @@ services:
       MYSQL_PASSWORD: moodlepass
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - moodle_net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   moodle:
-    image: bitnami/moodle:latest
+    build: ./moodle   # <-- utilise ton Dockerfile personnalisé
     container_name: moodle
     restart: always
     environment:
@@ -22,10 +29,18 @@ services:
       MOODLE_DATABASE_NAME: moodle
       MOODLE_DATABASE_USER: moodle
       MOODLE_DATABASE_PASSWORD: moodlepass
+      MOODLE_SITE_NAME: "Plateforme Remediation"
+      MOODLE_LANG: fr
+      TZ: Africa/Dakar
     ports:
       - "8080:8080"
     volumes:
       - moodle_data:/bitnami/moodle
+    networks:
+      - moodle_net
+    depends_on:
+      mariadb:
+        condition: service_healthy
 
   nginx:
     image: nginx:latest
@@ -36,7 +51,17 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx_logs:/var/log/nginx
+    networks:
+      - moodle_net
+    depends_on:
+      - moodle
 
 volumes:
   db_data:
   moodle_data:
+  nginx_logs:
+
+networks:
+  moodle_net:
+    driver: bridge
