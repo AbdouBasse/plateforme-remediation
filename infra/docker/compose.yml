@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.6
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: moodle
+      MYSQL_USER: moodle
+      MYSQL_PASSWORD: moodlepass
+    volumes:
+      - db_data:/var/lib/mysql
+
+  moodle:
+    image: bitnami/moodle:latest
+    container_name: moodle
+    restart: always
+    environment:
+      MOODLE_DATABASE_HOST: mariadb
+      MOODLE_DATABASE_NAME: moodle
+      MOODLE_DATABASE_USER: moodle
+      MOODLE_DATABASE_PASSWORD: moodlepass
+    ports:
+      - "8080:8080"
+    volumes:
+      - moodle_data:/bitnami/moodle
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
+volumes:
+  db_data:
+  moodle_data:
